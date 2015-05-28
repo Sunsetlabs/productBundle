@@ -1,0 +1,68 @@
+.image-picker {
+    display: inline-block;
+    position: relative;
+    margin: 0 2px;
+}
+.image-image {
+    width: 200px;
+    vertical-align: top;
+}
+.images {
+    white-space: nowrap;
+    overflow-x: scroll;
+    max-width: 750px;
+}
+.remove_image, .remove_image:active, .remove:hover {
+    position: absolute;
+    display: block;
+    /*border-radius: 20px;*/
+    background: #D44542;
+    padding: 2px 6px;
+    margin: 5px;
+    color: white !important;
+    top: 0;
+    right: 0;
+}
+.image_picker_selector {
+    width: 700px;
+    overflow-x: scroll !important;
+    display: block;
+    white-space: nowrap;
+}
+
+.image_picker_selector li {
+    width: 200px;
+    display: inline-block;
+    float: none !important;
+}
+
+.btn-group.add_image {
+    display: block;
+    width: 111px;
+    height: 31px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.btn.add_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 4px !important;
+}
+input.add_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+.texture-input, .image-input, .texture-input div, .image-input div ,.texture-input input, .image-input input{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}

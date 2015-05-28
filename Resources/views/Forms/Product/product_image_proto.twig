@@ -1,0 +1,8 @@
+<div class="image-picker">
+	{% set path = (img_form.vars.value) ? img_form.vars.value.getWebPath():'' %}
+	<img src="{{ path }}" class="image-image">
+	<div class="image-input">
+		{{ form_widget(img_form.file)}}
+	</div>
+	<a href="#" class="remove_image"><i class="fa fa-trash"></i></a>
+</div>

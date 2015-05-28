@@ -1,0 +1,13 @@
+{% set add = (form.products|length > 0) ? false:true %}
+{% set col = (12 // (fields|length + 1)) %}
+<div class="attributes col-lg-offset-2" data-add="{{ (add) ? 1:0 }}" data-prototype="{% filter escape %}{% include '@SunsetlabsProduct/Forms/ProductGroup/product_group_item_edit.twig' with { 'prod': form.products.vars.prototype, 'col' : col } %}{% endfilter %}">
+    <div class="title col-lg-12">
+	    {% for field in fields %}
+	    		<span class="col-lg-{{ col }} text-center "><strong>{{ field }}</strong></span>	
+	    {% endfor %}
+	    		<span class="col-lg-{{ col }} text-center"><strong>Acciones</strong></span>
+    </div>
+    {% for prod in form.products %}
+        {% include '@SunsetlabsProduct/Forms/ProductGroup/product_group_item_edit.twig' with { 'prod': prod.children, 'col' : col } %}
+    {% endfor %}
+</div>

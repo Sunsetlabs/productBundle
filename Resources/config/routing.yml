@@ -1,0 +1,18 @@
+edit_product_group:
+    path:     '/admin/product/group/edit/{id}'
+    defaults: { _controller: sl.product.group.admin.controller:editAction }
+delete_product_group:
+    path:     '/admin/product/group/delete/{id}'
+    defaults: { _controller: sl.product.group.admin.controller:deleteAction }
+edit_product:
+    path:     '/admin/product/edit/{id}'
+    defaults: { _controller: sl.product.admin.controller:editAction }
+delete_product:
+    path:     '/admin/product/delete/{id}'
+    defaults: { _controller: sl.product.admin.controller:deleteAction }
+retrive_products:
+    path:     '/admin/product/retrive'
+    defaults: { _controller: sl.product.admin.controller:retriveProductsAction }
+retrive_product_info:
+    path:     '/admin/product/retrive/info'
+    defaults: { _controller: sl.product.admin.controller:retriveProductInfoAction}

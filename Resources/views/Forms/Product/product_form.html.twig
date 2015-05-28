@@ -1,0 +1,69 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/sunsetlabsproduct/css/product/admin.css') }}">
+{% endblock head_stylesheets %}
+
+{% block content_title %}Producto{% endblock %}
+{% block main %}
+    <hr>
+    {{ form_start(form, { 'attr' : { 'class' : 'form-horizontal' } }) }}
+        {{ form_row(form._token) }}
+        {% for name, widget in form.children  %}
+            {% if (not widget.rendered) and (name != 'images') %}
+                <div class="form-group">
+                    {{ form_label(widget, widget.vars.label, { 'label_attr' : { 'class' : 'col-lg-2 control-label' } }) }}
+                    <div class="col-lg-10">
+                        {{ form_widget(widget, { 'attr' : { 'class' : 'form-control' }  }) }}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <div class="form-group">
+            {{ form_label(form.images, form.images.vars.label, { 'label_attr' : { 'class' : 'col-lg-2 control-label' } }) }}
+            <div class="col-lg-10">
+                <div class="btn-group add_image">
+                    <a href="#" class="add_image btn btn-xs">Agregar Imagen</a>
+                    <input type="file" id="add-image" class="add_image">
+                </div>
+                <div class="images" data-prototype="{% filter escape %}{% include '@SunsetlabsProduct/Forms/Product/product_image_proto.twig' with { 'img_form': form.images.vars.prototype } %}{% endfilter %}">
+                    {% for img in form.images %}
+                        {% include '@SunsetlabsProduct/Forms/Product/product_image_proto.twig' with { 'img_form' : img } %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+
+        <div class="col-lg-10 col-lg-offset-2">
+            <div id="form-actions-row">
+                <button type="submit" class="btn">
+                    <i class="fa fa-save"></i> Gudardar
+                </button>
+                {% if form.vars.data.getId() %}
+                    <a type="submit" id="button-delete" class="btn btn-danger" href="{{ path('delete_product', { 'id' : form.vars.data.getId() }) }}">
+                        <i class="fa fa-trash"></i> Borrar
+                    </a>
+                {% endif %}
+                <a class="btn btn-secondary" href="{{ path('admin', { 'action' : 'list', 'view' : 'list', 'entity' : 'Product' } ) }}">Listar Productos</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+
+
+{% block body_javascript %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/sunsetlabsproduct/js/product/admin.js') }}"></script>
+    <script src="{{ asset('bundles/easyadmin/javascript/jquery.are-you-sure.min.js') }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('#new-form').areYouSure({ 'message': 'You haven\'t saved the changes made on this form.' });
+        });
+    </script>
+{% endblock %}

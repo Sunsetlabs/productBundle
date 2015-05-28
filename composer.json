@@ -1,0 +1,23 @@
+{
+    "name": "sunsetlabs/product-bundle",
+    "type": "symfony-bundle",
+    "description": "Product functionality for Symfony2 applications",
+    "keywords": ["product", "ecommerce"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alejo Rodriguez",
+            "email": "a.rodsott@gmail.com"
+        },
+        {
+            "name": "Sunsetlabs",
+            "homepage": "http://sunsetlabs.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Sunsetlabs\\ProductBundle\\": "" }
+    },
+    "branch-alias" : {
+        "dev-master" : "master"
+    }
+}
