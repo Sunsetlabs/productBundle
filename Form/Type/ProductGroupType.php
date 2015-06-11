@@ -26,7 +26,7 @@ class ProductGroupType extends AbstractType
         $group = $builder->getData();
 
     	$builder->add('products', 'collection', array(
-    			'type' => 'product_group_item',
+    			'type' => 'product_group_item_type',
                 'options' => array('provider' => $group),
     			'allow_add' => true,
     			'allow_delete' => true,
