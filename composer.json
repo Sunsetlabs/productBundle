@@ -18,6 +18,7 @@
         "psr-4": { "Sunsetlabs\\ProductBundle\\": "" }
     },
     "branch-alias" : {
-        "dev-master" : "master"
+        "dev-master" : "master",
+        "dev-v2"     : "v2.0"
     }
 }
