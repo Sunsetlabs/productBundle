@@ -1,0 +1,6 @@
+{{ form_start(form, { 'attr' : { 'id' : 'add_product_form' } }) }}
+	<div class="form-group {{ (form.stock.vars.valid) ? '':'has-error' }}">
+		{{ form_label(form.stock) }}
+		{{ form_widget(form.stock, { 'attr' : { 'class' : 'form-control' } }) }}
+	</div>
+{{ form_end(form) }}

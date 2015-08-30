@@ -1,0 +1,163 @@
+.texture-picker{
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    position: relative;
+}
+.image-picker {
+    /*width: 150px;*/
+    /*height: 200px;*/
+    /*display: inline-block;*/
+    display: inline-block;
+    position: relative;
+    margin: 0 2px;
+}
+.texture-image{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    vertical-align: top;
+}
+.image-image {
+    width: 200px;
+    vertical-align: top;
+}
+.texture-input, .image-input, .texture-input div, .image-input div ,.texture-input input, .image-input input{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+.images {
+    white-space: nowrap;
+    overflow-x: scroll;
+    /*height: 210px;*/
+    max-width: 750px;
+}
+
+.remove_image, .remove_image:active, .remove:hover {
+    position: absolute;
+    display: block;
+    background: #D44542;
+    padding: 2px 6px;
+    margin: 5px;
+    color: white !important;
+    top: 0;
+    right: 0;
+}
+
+.image_picker_selector {
+    width: 100%;
+    overflow-x: scroll !important;
+    display: block;
+    white-space: nowrap;
+}
+
+.image_picker_selector li {
+    width: 200px;
+    display: inline-block;
+    float: none !important;
+}
+
+.btn-group.add_image {
+    display: block;
+    width: 111px;
+    height: 31px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.btn.add_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 4px !important;
+}
+input.add_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+div.form-control {
+  background: #FFFFFF;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  height: auto;
+}
+.sp-container.sp-flat {
+    background-color: white;
+    border: 1px solid #eee;
+}
+
+.preview-container {
+    float: left;
+    padding-left: 15px;
+}
+.preview {
+    border: 1px solid #ccc;
+}
+.preview, .preview-texture {
+    height: 60px;
+    width: 60px;
+}
+.has-error .preview-texture, .has-error .preview {
+    border: 1px solid #D44542;
+}
+.has-error p{
+    color: #D44542;
+}
+.texture-container{
+    margin-bottom: 15px;
+}
+
+.product-texture img, .product-texture span{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
+
+.category_list, .category_list ul{
+    list-style: none;
+    margin-top: 0px;
+    margin-bottom: 15px;
+}
+.category_list li{
+    margin: 0px;
+}
+
+.category_list label {
+  padding-left: 20px;
+  border-bottom: 1px solid #A5A5A5;
+  border-left: 1px solid #A5A5A5;
+  margin-bottom: 0px;
+}
+
+li:not(.lastChild) ul {
+    border-left: 1px solid #A5A5A5;
+    margin-left: 0;
+    padding-left: 30px;
+    margin: 0;
+    padding-bottom: 15px;
+}
+
+li.lastChild ul:first-child {
+    border-left: 1px solid white;
+}
+
+.category_list span {
+    cursor: pointer;
+}
+
+.modal-dialog .modal-footer {
+    margin-top: 0px;
+}

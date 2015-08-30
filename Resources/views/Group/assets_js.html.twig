@@ -1,0 +1,171 @@
+<script src="{{ asset('bundles/sunsetlabsproduct/js/jquery.magnific-popup.min.js') }}"></script>
+<script type="text/javascript">
+	var admin = {
+		init: function(){
+			admin.imageCollection = $('div.images');
+			admin.imageCollection.each(function(){
+				$(this).data('index', $(this).find(':input').length);
+			})
+
+			$('.add-product, .edit_product').magnificPopup({
+				type: 'ajax',
+				callbacks: {
+					ajaxContentAdded: function(){
+						admin.modal.init();
+					}
+				}
+			})
+
+			admin.observe();
+		},
+		observe: function(){
+			admin.observeAddImage();
+			admin.observeDeleteImage();
+			admin.observeDeleteProduct();
+		},
+		observeAddImage: function(){
+			$('#add-image').unbind('change').change(function(e){
+			    e.preventDefault();
+			    $this = $(this).clone();
+			    $(this).parent().append($this);
+			    admin.addImage($(this));
+			    admin.observeAddImage();
+			    admin.observeDeleteImage();
+			})
+		},
+		observeDeleteImage: function(){
+			$('.remove_image').unbind('click').click(function(e){
+				e.preventDefault();
+				$(this).parents('.image-picker').remove();
+			})
+		},
+		observeDeleteProduct: function(){
+			$('.delete_product_item').unbind('click').click(function(e){
+				e.preventDefault();
+				admin.deleteProduct($(this));
+			})
+		},
+		deleteProduct: function($delete){
+			var url = $delete.attr('href');
+			$.ajax({
+				url: url,
+				type: 'post',
+				dataType: 'json',
+				success: function(json){
+					if (json.ok) {
+						$delete.parents('tr').first().remove();
+						$td = $('.product_message_success').find('td');
+					}else{
+						$td = $('.product_message_error').find('td');
+					}
+
+					$td.html(json.message);
+					$td.slideDown();
+					setTimeout(function(){
+						$td.slideUp();
+					}
+					, 3000);
+				}
+			})
+		},
+		addImage: function($input){
+			var proto = admin.imageCollection.data('prototype');
+			var index = admin.imageCollection.data('index');
+			var newForm = proto.replace(/__name__/g, index);
+			admin.imageCollection.data('index', index + 1);
+			$newImage = $(newForm);
+
+			$file = $newImage.find('input[type="file"]');
+			$input.attr('id',$file.attr('id'));
+			$input.attr('name',$file.attr('name'));
+			$file.replaceWith($input);
+
+			admin.imageCollection.prepend($newImage);
+			$newImage.find('input[type="file"]').unbind('change').change(function(e){
+			    e.preventDefault();
+			    admin.readURL(this, '.image-picker');
+			});
+
+			$input.change();
+
+			$('.remove_image').unbind('click').on('click', function(e){
+			    e.preventDefault();
+			    $(this).parents('div').first().remove();
+			})
+		},
+		readURL: function(input, prev_selector){
+			if (input.files && input.files[0]) {
+			    var reader = new FileReader();
+			    reader.onload = function (e) {
+			        $(input).parents(prev_selector).find('img').attr('src', e.target.result);
+			    }
+
+			    reader.readAsDataURL(input.files[0]);
+			}
+		}
+	}
+
+	admin.modal = {
+		init: function(){
+			admin.modal.observe();
+		},
+		observe: function(){
+			admin.modal.getForm().submit(function(e){
+				e.preventDefault();
+
+				var data = new FormData(this);
+
+				$.ajax({
+					url: $(this).attr('action'),
+					data: data,
+					dataType: 'json',
+					type: 'post',
+					async: false,
+					cache: false,
+					contentType: false,
+					processData: false,
+					success: admin.modal.submitSuccess
+				})
+
+			})
+
+			admin.modal.getSubmitButton().unbind('click').click(function(e){
+				admin.modal.getForm().submit();
+			})
+		},
+		submitSuccess: function(json){
+			if (json.hasOwnProperty('html')) {
+				admin.modal.reload(json.html);
+			}else{
+				admin.modal.exit(json);
+			}
+
+		},
+		reload: function(partial){
+			var replace = admin.modal.getForm().replaceWith(partial).promise();
+			replace.done(function(){
+				admin.modal.init();
+			})
+		},
+		exit: function(json){
+			if (json.hasOwnProperty('row')) {
+				var $row = $('#product_' + json.id);
+				if ($row.length > 0) {
+					$row.replaceWith(json.row);
+				}else{
+					$(json.row).insertBefore($('.last'));
+				}
+				admin.init();
+			}
+			$.magnificPopup.instance.close();
+		},
+		getForm: function (){
+			return $('#add_product_form');
+		},
+		getSubmitButton: function(){
+			return $('#submit_add_product');
+		}
+	}
+
+	admin.init();
+</script>

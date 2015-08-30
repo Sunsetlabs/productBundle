@@ -1,13 +1,4 @@
 services:
-    sl.product.group.admin.controller:
-        class: Sunsetlabs\ProductBundle\Controller\ProductGroupAdminController
-        arguments:
-            - "@doctrine.orm.entity_manager"
-            - "@templating"
-            - "@form.factory"
-            - "@router"
-            - "%sl.product.group.class%"
-            - "%sl.product.form.fields%"
     sl.product.admin.controller:
         class: Sunsetlabs\ProductBundle\Controller\ProductAdminController
         arguments:
@@ -21,14 +12,12 @@ services:
         class: Sunsetlabs\ProductBundle\Form\Type\ProductGroupType
         arguments:
             - "%sl.product.group.class%"
-            - "%sl.product.group.form.fields%"
         tags:
             - { name: form.type, alias: product_group_type }
     sunsetlabs_product.form.type.product_group_item:
         class: Sunsetlabs\ProductBundle\Form\Type\ProductGroupItemType
         arguments:
             - "%sl.product.class%"
-            - "%sl.product.form.fields%"
         tags:
             - { name: form.type, alias: product_group_item_type }
     sunsetlabs_product.form.type.product:

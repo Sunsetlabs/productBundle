@@ -1,0 +1,13 @@
+{% set ext = form.vars.data.getId() ? 'edit':'new' %}
+{% extends '@EasyAdmin/default/' ~ ext ~ '.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    {% include '@SunsetlabsProduct/Group/assets_css.html.twig' %}
+{% endblock head_stylesheets %}
+
+
+{% block body_javascript %}
+    {{ parent() }}
+    {% include '@SunsetlabsProduct/Group/assets_js.html.twig' %}
+{% endblock %}

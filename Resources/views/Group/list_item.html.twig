@@ -1,0 +1,8 @@
+<tr id="product_{{ product.getId() }}">
+	<td>{{ product.getStock() }}</td>
+	<td>
+		<a class="edit_product" href="{{ path('admin_add_product_item', { 'group' : product.getGroup().getId(), 'item' : product.getId() }) }}">editar</a>
+		/
+		<a class="delete_product_item" href="{{ path('admin_remove_product_item', { 'group' : product.getGroup().getId(), 'item' : product.getId() }) }}">borrar</a>
+	</td>
+</tr>

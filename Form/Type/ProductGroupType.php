@@ -9,35 +9,39 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class ProductGroupType extends AbstractType
 {
 	protected $gc;
-	protected $fields;
 
-	public function __construct($gc, $fields)
+	public function __construct($gc)
 	{
 		$this->gc = $gc;
-		$this->fields = $fields;
 	}
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-    	foreach($this->fields as $field){
-    		$builder->add($field);
-    	}
+        $builder->add('price', 'integer', array(
+            'label' => 'Precio',
+            'required' => false
+        ));
+        $builder->add('code', 'text', array(
+            'label' => 'Codigo',
+            'required' => false
+        ));
+        $builder->add('name', 'text', array(
+            'label' => 'Nombre',
+            'required' => false
+        ));
+        $builder->add('description', 'textarea', array(
+            'label' => 'Descripción',
+            'required' => false
+        ));
 
         $group = $builder->getData();
-
-    	$builder->add('products', 'collection', array(
-    			'type' => 'product_group_item_type',
-                'options' => array('provider' => $group),
-    			'allow_add' => true,
-    			'allow_delete' => true,
-    			'by_reference' => false
-    	));
 
     	$builder->add('images', 'collection', array(
     			'type' => 'image_type',
     			'allow_add' => true,
     			'allow_delete' => true,
-    			'by_reference' => false
+    			'by_reference' => false,
+                'label' => 'Imagenes'
     	));
     }
 

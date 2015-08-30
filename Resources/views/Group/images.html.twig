@@ -5,9 +5,9 @@
             <a href="#" class="add_image btn btn-xs">Agregar Imagen</a>
             <input type="file" id="add-image" class="add_image">
         </div>
-        <div class="images" data-prototype="{% filter escape %}{% include '@SunsetlabsProduct/Forms/ProductGroup/product_group_image_proto.twig' with { 'img_form': form.images.vars.prototype } %}{% endfilter %}">
+        <div class="images" data-prototype="{% filter escape %}{% include '@SunsetlabsProduct/Group/image_proto.twig' with { 'img_form': form.images.vars.prototype } %}{% endfilter %}">
             {% for img in form.images %}
-                {% include '@SunsetlabsProduct/Forms/ProductGroup/product_group_image_proto.twig' with { 'img_form' : img } %}
+                {% include '@SunsetlabsProduct/Group/image_proto.twig' with { 'img_form' : img } %}
             {% endfor %}
         </div>
     </div>

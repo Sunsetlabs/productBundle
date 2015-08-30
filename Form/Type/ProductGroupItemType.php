@@ -9,19 +9,19 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class ProductGroupItemType extends AbstractType
 {
 	protected $pc;
-	protected $fields;
 
-	public function __construct($pc, $fields)
+	public function __construct($pc)
 	{
 		$this->pc = $pc;
-		$this->fields = $fields;
 	}
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-    	foreach($this->fields as $field){
-	    		$builder->add($field);
-    	}
+    	$builder->add('stock', 'integer', array(
+            'label' => 'Stock',
+            'required' => false
+        ));
+
         $builder->add('images', 'entity', array(
             'class' => 'SunsetlabsMediaBundle:Image',
             'choices' => $options['provider']->getImages(),

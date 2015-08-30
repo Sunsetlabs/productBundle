@@ -1,0 +1,21 @@
+<div class="col-lg-10 col-lg-offset-2">
+	<h2>Variantes</h2>
+	<table class="table" id="product_table">
+		<tr>
+			<th>Stock</th>
+			<th></th>
+		</tr>
+		<tr class="product_message_success">
+			<td class="alert alert-success" colspan="4" style="display:none"></td>
+		</tr>
+		<tr class="product_message_error">
+			<td class="alert alert-danger" colspan="4" style="display:none"></td>
+		</tr>
+		{% for product in group.getProducts() %}
+			{% include '@SunsetlabsProduct/Group/list_item.html.twig' with { 'product' : product } %}
+		{% endfor %}
+		<tr class="last">
+			<td colspan="4"><a href="{{ path('admin_add_product_item', { 'group' : group.getId() }) }}" class="add-product">+ producto</a></td>
+		</tr>
+	</table>	
+</div>
