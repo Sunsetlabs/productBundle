@@ -57,10 +57,17 @@ abstract class ProductGroup implements ProductGroupInterface
 	 */
 	protected $products;
 
+	/**
+	 * ProductGroup Categories
+	 * @var ArrayCollection
+	 */
+	protected $categories;
+
 	public function __construct()
 	{
 		$this->images = new ArrayCollection();
 		$this->products = new ArrayCollection();
+		$this->categories = new ArrayCollection();
 	}
 
 	/**
@@ -213,5 +220,48 @@ abstract class ProductGroup implements ProductGroupInterface
 		$this->products->removeElement($product);
 		$product->setGroup();
 		return $this;
+	}
+
+	/**
+	 * Gets Categories
+	 * @return ArrayCollection
+	 */
+	public function getCategories()
+	{
+		return $this->categories;
+	}
+
+	/**
+	 * Adds Category
+	 * @param Category $category
+	 * @return ProductGroup
+	 */
+	public function addCategory($category)
+	{
+		$category->addProduct($this);
+		$this->categories->add($category);
+		return $this;
+	}
+
+	/**
+	 * Removes Category
+	 * @return Category
+	 */
+	public function removeCategory($category)
+	{
+		$this->categories->removeElement($category);
+		return $this;
+	}
+
+	/**
+	 * Checks if ProductGroup has a Category
+	 * @param  Category  $category
+	 * @return boolean
+	 */
+	public function hasCategory($category)
+	{
+		return $this->categories->exists(function($key, $cat) use ($category) {
+			return ($category->getId() == $cat->getId());
+		});
 	}
 }

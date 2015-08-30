@@ -1,0 +1,26 @@
+{% for cat in categories %}
+	<tr class="{{ (cat.getParent()) ? cat.getParent().getSlug():'root' }} {{ (cat.getChildren()|length) ? 'parent':'' }}" data-class="{{ cat.getSlug() }}">
+		<td class="sorted">{{ cat.getId() }}</td>
+		<td style="padding-left:{{ (level * 25) ~ 'px' }}" class="name">
+			{% if cat.getChildren()|length > 0 %}
+				<i class="fa fa-chevron-down down"></i>
+				<i class="fa fa-chevron-up hidden up"></i>
+			{% endif %}
+			{{ cat.getName() }}
+		</td>
+		<td>
+			<div class="btn-group">
+				<a class ="btn btn-xs" href="{{ path('admin', { 'action' : 'new', 'entity' : 'Category', 'parent' : cat.getId() } ) }}">+ Subcategoría</a>
+
+				<a class ="btn btn-xs" href="{{ path('admin', { 'action' : 'edit', 'entity' : 'Category', 'id' : cat.getId() } ) }}">Editar</a>
+				{% if categories|length > 1 %}
+					<a class="btn btn-xs" href="{{ path('demote_cat', { 'id' : cat.getId() }) }}">Subir</a>
+					<a class="btn btn-xs" href="{{ path('promote_cat', { 'id' : cat.getId() }) }}">Bajar</a>
+				{% endif %}
+			</div>
+		</td>
+	</tr>
+	{% if cat.getChildren()|length > 0 %}
+		{% include '@SunsetlabsProduct/Category/list_categories.html.twig' with { 'categories' : cat.getChildren(), 'level' : level + 1 } only %}
+	{% endif %}
+{% endfor %}

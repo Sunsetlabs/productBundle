@@ -1,0 +1,15 @@
+{% set vars = {
+	'product' : product,
+	'name'    : name
+} %}
+
+
+<label>
+	<input type="checkbox" name="{{ name }}" {{ (product and product.hasCategory(cat)) ? 'checked':'' }} value="{{ cat.getId() }}">
+	{{ cat.getName() }}
+</label>
+{% if cat.getChildren()|length > 0 %}
+	<span>+</span>
+	{% set vars = vars|merge({'categories': cat.getChildren() }) %}
+	{% include '@SunsetlabsProduct/Category/widget.html.twig' with vars %}
+{% endif %}

@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminController extends Controller
 {
@@ -95,5 +96,100 @@ class AdminController extends Controller
 			'ok' => true,
 			'message' => 'Se elimino el producto con exito.'
 		));
+	}
+	
+	/**
+	 * Promote Category
+	 *
+	 * @Route("/admin/category/promote/{id}", name="promote_cat")
+	 * 
+	 * @param  Request $request
+	 * @param  integer $id  Category Id
+	 * @return RedirectResponse
+	 */
+	public function promoteCategoryAction(Request $request, $id)
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+		$repo = $em->getRepository('AppBundle:Category');
+		$cat = $repo->find($id);
+
+		$position = $cat->getPosition();
+
+		$switch_cat = $repo->findOneBy(array('parent' => $cat->getParent(), 'position' => $position + 1));
+
+		if ($switch_cat and $switch_cat->getParent() == $cat->getParent()) {
+			$cat->setPosition($switch_cat->getPosition());
+			$switch_cat->setPosition($position);
+			$em->persist($cat);
+			$em->persist($switch_cat);
+		}else{
+			$cat->setPosition($position + 1);
+			$em->persist($cat);
+		}
+
+		$em->flush();
+
+		return new RedirectResponse($this->generateUrl('admin', array(
+			'action' => 'list',
+			'entity' => 'Category'
+		)));
+	}
+	
+	/**
+	 * Demote Category
+	 * 
+	 * @Route("/admin/category/demote/{id}", name="demote_cat")
+	 * 
+	 * @param  Request $request
+	 * @param  integer  $id Category Id
+	 * @return RediractResponse
+	 */
+	public function demoteCategoryAction(Request $request, $id)
+	{	
+		$em = $this->getDoctrine()->getEntityManager();
+		$repo = $em->getRepository('AppBundle:Category');
+		$cat = $repo->find($id);
+
+		$position = $cat->getPosition();
+
+		if ($position > 0) {
+			$switch_cat = $repo->findOneBy(array('parent' => $cat->getParent(), 'position' => $position - 1));
+
+			if ($switch_cat and $switch_cat->getParent() == $cat->getParent()) {
+				$cat->setPosition($switch_cat->getPosition());
+				$switch_cat->setPosition($position);
+				$em->persist($cat);
+				$em->persist($switch_cat);
+			}else{
+				$cat->setPosition($position - 1);
+				$em->persist($cat);
+			}
+
+			$em->flush();
+		} 
+
+
+		return new RedirectResponse($this->generateUrl('admin', array(
+			'action' => 'list',
+			'entity' => 'Category'
+		)));
+	}
+
+	/**
+	 * Renders Category form widget
+	 * 
+	 * @Route("/category/widget/{name}/{product_id}", name="category_widget")
+	 *
+	 * @param  Request $request
+	 * @param  string  $name  Form Checkbox name
+	 * @param  integer $product_id Product Id
+	 */
+	public function categoryWidgetRenderAction(Request $request, $name, $product_id)
+	{
+	    $em = $this->getDoctrine()->getEntityManager();
+	    $categories = $em->getRepository('AppBundle:Category')->findRoots(); // TODO: make Category classname a parameter
+	    $product = $em->getRepository($this->getParameter('sl.product.group.class'))->find($product_id);
+
+	    return $this->render('@SunsetlabsProduct/Category/widget.html.twig', array('categories' => $categories, 'product' => $product, 'name' => $name));
 	}
 }

@@ -1,0 +1,64 @@
+{% extends '@EasyAdmin/default/list.html.twig' %}
+
+{% block search_action %}
+{% endblock search_action %}
+
+{% block main %}
+	<table class="table">
+		<thead>
+			<tr>
+				<th class="sorted  integer col-lg-2"><a href="#">ID</a></th>
+				<th class="col-lg-6"><a href="#">Nombre</a></th>
+				<th><a href="#">Acciones</a></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% include '@SunsetlabsProduct/Category/list_categories.html.twig' with { 'categories' : categories , 'level' : 1} only %}
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block body_javascript %}
+	{{ parent() }}
+	<script type="text/javascript">
+		var tree_view = {
+			init: function() {
+				$('body').addClass('list');
+				$('.parent').addClass('closed');
+				
+				$('tbody tr').hide();
+				$('.root').show();
+
+				$('.parent').click(function(){
+					var is_open = $(this).hasClass('open');
+
+					if (is_open) {
+						tree_view.hide_childs($(this));
+					}else{
+						tree_view.show_childs($(this));
+					}
+				})
+
+			},
+			hide_childs: function($tr){
+				$tr.each(function(){
+					var selector = '.' + $(this).data('class');
+					tree_view.hide_childs($(selector + '.parent'));
+					$(selector).hide();
+					$tr.removeClass('open');
+					$tr.addClass('closed');
+					$tr.find('i').toggleClass('hidden');
+				})
+			},
+			show_childs: function($tr){
+				var selector = '.' + $tr.data('class');
+				$(selector).show();
+				$tr.removeClass('close');
+				$tr.addClass('open');
+				$tr.find('.name').first().find('i').toggleClass('hidden');
+
+			}
+		}
+		tree_view.init();
+	</script>
+{% endblock body_javascript %}
