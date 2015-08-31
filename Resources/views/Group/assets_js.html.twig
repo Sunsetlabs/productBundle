@@ -115,6 +115,8 @@
 
 				var data = new FormData(this);
 
+				console.log($(this).attr('action'));
+
 				$.ajax({
 					url: $(this).attr('action'),
 					data: data,
@@ -168,4 +170,58 @@
 	}
 
 	admin.init();
+</script>
+
+<script type="text/javascript">
+	$('.category_list ul').slideUp();
+	$('.category_list li').each(function(){
+		var $input = $(this).find('input').first();
+		if ($input.is(':checked')) {
+			$(this).find('ul').first().slideDown();
+		}
+	})
+	$('.category_list').find('span').unbind('click').click(function(e){
+		$(this).siblings('ul').first().slideToggle();
+		if ($(this).html() == '+') {
+			$(this).html('-');
+		}else{
+			$(this).html('+');
+		}
+	})
+
+	$('.category_list').find('li:last-child').each(function(){
+		$(this).addClass('lastChild');
+		$(this).find('ul').first().css('border-left', '0px');
+	})
+
+
+	$('.category_list input').change(function(e){
+		var check = $(this).is(':checked')
+
+		if (check) {
+			check_parent($(this));
+		}else{
+			uncheck_childs($(this));
+		}
+
+	})
+
+	function check_parent($input) {
+		var ul = $input.parents('ul').first();
+		var li = ul.parent('li');
+		if (li.length > 0) {
+			var $parent = li.find('input').first();
+			if ($parent.length > 0) {
+				$parent.prop('checked', true).change();
+			}
+		}
+	}
+
+	function uncheck_childs($input) {
+		var ul = $input.parents('li').first().find('ul').first();
+		if (ul.length > 0) {
+			ul.find('input').prop('checked', false);
+		}
+	}
+
 </script>

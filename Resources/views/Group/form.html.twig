@@ -20,7 +20,14 @@
                 {% include '@SunsetlabsProduct/Group/images.html.twig' with { 'form' : form } %}
             {% endif %}
 
-            {% if form.vars.data.getId() and form.products is defined %}
+            {% if form.vars.data.getId()  and form.categories is defined%}
+                <div class="col-lg-8 col-lg-offset-2">
+                    <h2>Categorías</h2>
+                    {% render(path('category_widget', {'name': form.categories.vars.full_name ~ '[]', 'product_id' : form.vars.data.getId() })) %}
+                </div>
+            {% endif %}
+
+            {% if form.vars.data.getId() %}
                 {% include '@SunsetlabsProduct/Group/list_items.html.twig' with { 'group' : form.vars.data } %}
             {% endif %}
 
