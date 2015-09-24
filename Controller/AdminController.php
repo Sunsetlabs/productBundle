@@ -208,25 +208,10 @@ class AdminController extends Controller
 		try {
 			$em = $this->getDoctrine()->getManager();
 			$image = $em->getRepository('SunsetlabsMediaBundle:Image')->find($imageId);
-			$images = $em->getRepository('SunsetlabsMediaBundle:Image')->findBy(array('objId' => $image->getObjId(), 'objQualifiedClass' => $this->getParameter('sl.product.group.class')));
+			$images = $em->getRepository($this->getParameter('sl.product.group.class'))->find($image->getObjId())->getImages();
 			
-			$currentPosition = $image->getPosition();
-
-			if ($currentPosition < $position) {
-				foreach ($images as $img) {
-					if ($img->getPosition() <= $position and $img->getPosition() > $currentPosition) {
-						$img->setPosition($img->getPosition() - 1);
-						$em->persist($img);
-					}
-				}
-			}elseif($currentPosition > $position) {
-				foreach ($images as $img) {
-					if ($img->getPosition() >= $position and $img->getPosition() < $currentPosition) {
-						$img->setPosition($img->getPosition() + 1);
-						$em->persist($img);
-					}
-				}
-			}
+			$this->reOrderImages($image, $images, $position);
+			$em->flush();
 
 			$image->setPosition($position);
 			$em->persist($image);
@@ -242,5 +227,74 @@ class AdminController extends Controller
 				'message' => $e->getMessage()
 			), 400);
 		}
+	}
+
+	/**
+	 * Borra la imagen asociada a un grupo de productos.
+	 *
+	 * @Route("/admin/delete-image/{productId}/{imageId}", name="delete_image")
+	 * 
+	 * @param  int $productId Identifica al grupo de productos
+	 * @param  int $imageId   Identifica a la imagen
+	 * @return JsonResponse
+	 */
+	public function deleteProductGroupImage($productId, $imageId)
+	{
+	    $em = $this->getDoctrine()->getManager();
+	    $product = $em->getRepository($this->getParameter('sl.product.group.class'))->find($productId);
+	    $image   = $em->getRepository('SunsetlabsMediaBundle:Image')->find($imageId);
+
+	    try {
+	        if ($product and $image) {
+	        	$this->reOrderImages($image, $product->getImages(), count($product->getImages()));
+	            $product->removeImage($image);
+	            $em->persist($product);
+	            $em->flush();
+
+	            return new JsonResponse(array(
+	                'message' => 'Se ha eliminado la imagen correctamente!'
+	            ));
+	        }else{
+	            $message = "No se ha enctrado el product o imagen.";
+	        }
+	    } catch (\Exception $e) {
+	        $message = $e->getMessage();
+	    }
+
+	    return new JsonResponse(array(
+	        'message' => $message
+	    ), 400);
+	}
+
+	/**
+	 * Re ordena las imagenes de un grupo.
+	 * 
+	 * @param  Image $image Imagen que se reposicionara
+	 * @param  ArrayCollection $images Imagenes del grupo
+	 * @param  int $position Posicion a la que se movera la imagen
+	 */
+	protected function reOrderImages($image, $images, $position)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$currentPosition = $image->getPosition();
+
+		if ($currentPosition < $position) {
+			foreach ($images as $img) {
+				if ($img->getPosition() <= $position and $img->getPosition() > $currentPosition) {
+					$img->setPosition($img->getPosition() - 1);
+					$em->persist($img);
+				}
+			}
+		}elseif($currentPosition > $position) {
+			foreach ($images as $img) {
+				if ($img->getPosition() >= $position and $img->getPosition() < $currentPosition) {
+					$img->setPosition($img->getPosition() + 1);
+					$em->persist($img);
+				}
+			}
+		}
+
+		$image->setPosition($position);
+		$em->persist($image);
 	}
 }
