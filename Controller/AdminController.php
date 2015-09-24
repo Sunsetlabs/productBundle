@@ -192,4 +192,55 @@ class AdminController extends Controller
 
 	    return $this->render('@SunsetlabsProduct/Category/widget.html.twig', array('categories' => $categories, 'product' => $product, 'name' => $name));
 	}
+
+	/**
+	 * Changes image identified by imageId position to the given position and sorts others images
+	 * of the same group accordingly
+	 *
+	 * @Route("/admin/productGroup/images/order/{imageId}/{position}", name="order_product_images")
+	 * 
+	 * @param  int $imageId
+	 * @param  int $position
+	 * @return JsonRepsonse
+	 */
+	public function positionProductAction($imageId, $position)
+	{
+		try {
+			$em = $this->getDoctrine()->getManager();
+			$image = $em->getRepository('SunsetlabsMediaBundle:Image')->find($imageId);
+			$images = $em->getRepository('SunsetlabsMediaBundle:Image')->findBy(array('objId' => $image->getObjId(), 'objQualifiedClass' => $this->getParameter('sl.product.group.class')));
+			
+			$currentPosition = $image->getPosition();
+
+			if ($currentPosition < $position) {
+				foreach ($images as $img) {
+					if ($img->getPosition() <= $position and $img->getPosition() > $currentPosition) {
+						$img->setPosition($img->getPosition() - 1);
+						$em->persist($img);
+					}
+				}
+			}elseif($currentPosition > $position) {
+				foreach ($images as $img) {
+					if ($img->getPosition() >= $position and $img->getPosition() < $currentPosition) {
+						$img->setPosition($img->getPosition() + 1);
+						$em->persist($img);
+					}
+				}
+			}
+
+			$image->setPosition($position);
+			$em->persist($image);
+			$em->flush();	
+
+			return new JsonResponse(array(
+				'image' => $imageId,
+				'position' => $position
+			));
+
+		} catch (\Exception $e) {
+			return new JsonResponse(array(
+				'message' => $e->getMessage()
+			), 400);
+		}
+	}
 }
