@@ -56,6 +56,7 @@ class AdminController extends Controller
 
 		} elseif ($form->isSubmitted()) {
 			return new JsonResponse(array(
+				'errors' =>$form->getErrorsAsString(),
 				'html' => $this->renderView('@SunsetlabsProduct/Group/add_item_body.html.twig', array('form' => $form->createView()))
 			));
 		}

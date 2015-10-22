@@ -36,7 +36,9 @@ class ProductGroupType extends AbstractType
         $builder->add('categories', 'entity', array(
                 'class'    => 'AppBundle\Entity\Category', // TODO: inject Category class
                 'expanded' => true,
-                'multiple' => true
+                'multiple' => true,
+                'required'    => true,
+                'by_reference' => false
             )
         );
 

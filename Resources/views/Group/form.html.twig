@@ -25,6 +25,7 @@
                     <h2>Categorías</h2>
                     {% render(path('category_widget', {'name': form.categories.vars.full_name ~ '[]', 'product_id' : form.vars.data.getId() })) %}
                 </div>
+                {% do form.categories.setRendered %}
             {% endif %}
 
             {% if form.vars.data.getId() %}
